@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゲームリスト</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>ゲームリスト</h1>
+    <table>
+        <tr>
+            <th>作品番号</th>
+            <th>シリーズ名</th>
+            <th>発売日</th>
+            <th>タイトル</th>
+            <th>ハード</th>
+            <th>分類</th>
+            <th>備考</th>
+        </tr>
+        {% for game in games %}
+        <tr>
+            <td>{{ game['作品番号'] }}</td>
+            <td>{{ game['シリーズ名'] }}</td>
+            <td>{{ game['発売日'] }}</td>
+            <td>{{ game['タイトル'] }}</td>
+            <td>{{ game['ハード'] }}</td>
+            <td>{{ game['分類'] }}</td>
+            <td>{{ game['備考'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゲームリスト</title>
+</head>
+<body>
+    <h1>ゲームリスト</h1>
+
+    <!-- 🔍 検索フォーム -->
+    <form method="POST">
+        <input type="text" name="query" placeholder="ゲーム名・ハードで検索">
+        <button type="submit">検索</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>作品タイトル</th>
+            <th>発売日</th>
+            <th>ハード</th>
+            <th>メーカー</th>
+        </tr>
+        {% for game in games %}
+        <tr>
+            <td>{{ game["作品タイトル"] }}</td>
+            <td>{{ game["発売日"] }}</td>
+            <td>{{ game["ハード"] }}</td>
+            <td>{{ game["メーカー"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
