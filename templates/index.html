@@ -23,10 +23,19 @@
             background-color: #f2f2f2;
         }
         .push-btn {
-            background-color: #ffcc00;
+            padding: 8px 16px;
+            font-size: 14px;
             border: none;
-            padding: 5px 10px;
+            border-radius: 5px;
             cursor: pointer;
+        }
+        .pushed {
+            background-color: red;
+            color: white;
+        }
+        .not-pushed {
+            background-color: blue;
+            color: white;
         }
         input[type="text"] {
             padding: 5px;
@@ -42,31 +51,40 @@
 
     <!-- 🔎 検索フォーム -->
     <form method="GET" action="/">
-        <input type="text" name="search" placeholder="ゲームタイトルを検索">
+        <input type="text" name="search" placeholder="ゲームタイトルを検索" value="{{ search_query }}">
         <button type="submit">検索</button>
     </form>
 
-  <table border="1">
-    <tr>
-        <th>タイトル</th>
-        <th>発売日</th>
-        <th>ハード</th>
-        <th>推し数</th>
-        <th>推し</th>
-    </tr>
-    {% for game in games %}
-    <tr>
-        <td>{{ game.title }}</td>
-        <td>{% if game.release_date %}{{ game.release_date }}{% else %}不明{% endif %}</td>
-        <td>{% if game.platform %}{{ game.platform }}{% else %}不明{% endif %}</td>
-        <td>{{ game.push_count }}</td>
-        <td>
-            <form action="/push/{{ game.id }}" method="post">
-                <button type="submit">推し！</button>
-            </form>
-        </td>
-    </tr>
-
+    <table border="1">
+        <tr>
+            <th>タイトル</th>
+            <th>発売日</th>
+            <th>ハード</th>
+            <th>販売</th>
+            <th>推し数</th>
+            <th>推し</th>
+        </tr>
+        {% for game in games %}
+        <tr>
+            <td>{{ game.title }}</td>
+            <td>{% if game.release_date %}{{ game.release_date }}{% else %}不明{% endif %}</td>
+            <td>{% if game.platform %}{{ game.platform }}{% else %}不明{% endif %}</td>
+            <td>{% if game.developer %}{{ game.developer }}{% else %}不明{% endif %}</td>
+            <td>{{ game.push_count }}</td>
+            <td>
+                <form action="{{ url_for('push_game', game_id=game.id) }}" method="post">
+                    <button type="submit"
+                        class="push-btn {% if game.pushed %}pushed{% else %}not-pushed{% endif %}">
+                        {% if game.pushed %}
+                            推し解除
+                        {% else %}
+                            推す
+                        {% endif %}
+                    </button>
+                </form>
+            </td>
+        </tr>
         {% endfor %}
     </table>
-    
+</body>
+</html>
