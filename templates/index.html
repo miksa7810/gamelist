@@ -6,25 +6,37 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
             margin: 20px;
+            text-align: center;
+        }
+        .search-form {
+            background-color: #ccccff;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .search-form div {
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
         }
         table {
-            width: 80%;
+            width: 90%;
             margin: auto;
             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid black;
+            border: 1px solid #666;
             padding: 8px;
-            text-align: center;
         }
         th {
             background-color: #f2f2f2;
         }
         .push-btn {
-            padding: 8px 16px;
-            font-size: 14px;
+            padding: 5px 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -34,52 +46,49 @@
             color: white;
         }
         .not-pushed {
-            background-color: blue;
+            background-color: gray;
             color: white;
-        }
-        input[type="text"] {
-            padding: 5px;
-            width: 200px;
-        }
-        button {
-            padding: 5px 10px;
         }
     </style>
 </head>
 <body>
     <h1>ゲーム一覧</h1>
 
-    <!-- 🔎 検索フォーム -->
-    <form method="GET" action="/">
-        <input type="text" name="search" placeholder="ゲームタイトルを検索" value="{{ search_query }}">
-        <button type="submit">検索</button>
+    <form method="GET" action="/" class="search-form">
+        <div>
+            <label for="search">タイトル名</label>
+            <input type="text" name="search" value="{{ search_query }}">
+        </div>
+        <div>
+            <label for="series">シリーズ名</label>
+            <input type="text" name="series" value="{{ series_query }}">
+        </div>
+        <div style="align-self: flex-end;">
+            <button type="submit">検索</button>
+        </div>
     </form>
 
-    <table border="1">
+    <table>
         <tr>
             <th>タイトル</th>
             <th>発売日</th>
             <th>ハード</th>
-            <th>販売</th>
+            <th>メーカー</th>
             <th>推し数</th>
             <th>推し</th>
         </tr>
         {% for game in games %}
         <tr>
             <td>{{ game.title }}</td>
-            <td>{% if game.release_date %}{{ game.release_date }}{% else %}不明{% endif %}</td>
-            <td>{% if game.platform %}{{ game.platform }}{% else %}不明{% endif %}</td>
-            <td>{% if game.developer %}{{ game.developer }}{% else %}不明{% endif %}</td>
+            <td>{{ game.release_date or '不明' }}</td>
+            <td>{{ game.platform or '不明' }}</td>
+            <td>{{ game.developer or '不明' }}</td>
             <td>{{ game.push_count }}</td>
             <td>
-                <form action="{{ url_for('push_game', game_id=game.id) }}" method="post">
+                <form action="{{ url_for('push_game', game_id=game.id) }}" method="POST">
                     <button type="submit"
-                        class="push-btn {% if game.pushed %}pushed{% else %}not-pushed{% endif %}">
-                        {% if game.pushed %}
-                            推し解除
-                        {% else %}
-                            推す
-                        {% endif %}
+                            class="push-btn {% if game.pushed %}pushed{% else %}not-pushed{% endif %}">
+                        {% if game.pushed %}推し解除{% else %}推す{% endif %}
                     </button>
                 </form>
             </td>
